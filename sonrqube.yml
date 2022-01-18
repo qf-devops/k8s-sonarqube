@@ -5,7 +5,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: jenkins
+  name: sonarqube
 ---
 apiVersion: v1
 kind: Pod
@@ -14,7 +14,7 @@ metadata:
   labels:
     app: jen
     env: dev
-  namespace: jenkins
+  namespace: sonarqube
 spec:
   containers:
   - name: jen
