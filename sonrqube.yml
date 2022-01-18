@@ -1,0 +1,47 @@
+#kubectl run jen --image=nginx --port=80
+
+ #kubectl expose pod jen --port=80 --target-port=80 --name=ns1 --type=NodePort
+ # kubecgtl create ns dev
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jenkins
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jen
+  labels:
+    app: jen
+    env: dev
+  namespace: jenkins
+spec:
+  containers:
+  - name: jen
+    image: jenkins/jenkins:lts
+    ports:
+    - containerPort: 8080
+    volumeMounts:
+    - name: vol
+      mountPath: /var/jenkins_home
+  volumes:
+  - name: vol
+    hostPath:
+      path: /tmp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jensvc
+  labels:
+    app: jen
+    env: dev
+  namespace: jenkins
+spec:
+  selector:
+    app: jen
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: NodePort
